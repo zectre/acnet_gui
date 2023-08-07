@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/acnet_gui" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
