@@ -195,6 +195,9 @@ class acnet_gui:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
+            input_TOA = self.TOA_input.filePath()
+            input_Angle = self.angle_input.filePath()
+            input_AOT = self.AOT_input.filePath()
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
