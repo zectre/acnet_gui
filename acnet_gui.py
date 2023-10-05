@@ -23,7 +23,9 @@
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QFileDialog
+from qgis.PyQt import QtWidgets, uic
+from qgis.core import QgsProject, Qgis
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -179,6 +181,17 @@ class acnet_gui:
                 action)
             self.iface.removeToolBarIcon(action)
 
+    def select_output_file(self):
+        filename, _filter = QFileDialog.getSaveFileName(
+            self.dlg, "Select   output file ","", '*.csv')
+        self.dlg.lineEdit.setText(filename)
+       
+
+    def onPbRunClicked(self):
+        input_TOA = self.dlg.TOA_input.filePath()
+        input_Angle = self.dlg.angle_input.filePath()
+        input_AOT = self.dlg.AOT_input.filePath()
+        print('input received')
 
     def run(self):
         """Run method that performs all the real work"""
@@ -188,6 +201,7 @@ class acnet_gui:
         if self.first_start == True:
             self.first_start = False
             self.dlg = acnet_guiDialog()
+            self.dlg.output_button.clicked.connect(self.select_output_file)
 
         # show the dialog
         self.dlg.show()
@@ -195,9 +209,9 @@ class acnet_gui:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            input_TOA = self.TOA_input.filePath()
-            input_Angle = self.angle_input.filePath()
-            input_AOT = self.AOT_input.filePath()
+
+            self.onPbRunClicked()
+
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass

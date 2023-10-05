@@ -42,11 +42,7 @@ class acnet_guiDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
-    #     self.pb_run.clicked.connect(self.onPbRunClicked)
+
         
-    # def onPbRunClicked(self):
-    #     input_TOA = self.TOA_input.filePath()
-    #     input_Angle = self.angle_input.filePath()
-    #     input_AOT = self.AOT_input.filePath()
-    #     print(input)
+
 
