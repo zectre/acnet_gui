@@ -209,8 +209,6 @@ class acnet_gui:
 
         # Run the dialog event loop  
         result = self.dlg.exec_()
-<<<<<<< HEAD
-
         # See if OK was pressed  
         if result:  
             filename = self.dlg.lineEdit.text()  
@@ -224,12 +222,3 @@ class acnet_gui:
             self.iface.messageBar().pushMessage(  
                 "Success", "Output file written at " + filename,  
                 level=Qgis.Success, duration=3)
-=======
-        # See if OK was pressed
-        if result:
-            pass
-
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-
->>>>>>> 1ba676d63f3fafd3d3ea25371dd21e5f6fa0f7f8
