@@ -31,7 +31,10 @@ from .resources import *
 # Import the code for the dialog  
 from .acnet_gui_dialog import acnet_guiDialog
 import os.path  
-    
+import numpy as np
+import tensorflow as tf
+import h5py
+
     
 class acnet_gui:  
     """QGIS Plugin Implementation."""  
@@ -161,7 +164,7 @@ class acnet_gui:
     def initGui(self):  
         """Create the menu entries and toolbar icons inside the QGIS GUI."""  
     
-        icon_path = ':/plugins/display_info/icon.png'  
+        icon_path = ':/plugins/acnet_gui/icon.png'  
         self.add_action(  
             icon_path,  
             text=self.tr(u'Output layer info to a text file'),  
@@ -182,7 +185,7 @@ class acnet_gui:
     
     def select_output_file(self):  
         filename, _filter = QFileDialog.getSaveFileName(  
-            self.dlg, "Select output filename and destination","layer_info", '*.txt')  
+            self.dlg, "Select output filename and destination","layer_info", '*.csv')  
         self.dlg.lineEdit.setText(filename)  
     
     def run(self):  
@@ -194,6 +197,25 @@ class acnet_gui:
             self.first_start = False  
             self.dlg = acnet_guiDialog()  
             self.dlg.output_button.clicked.connect(self.select_output_file)  
+            self.plugin_dir = os.path.dirname(__file__)
+            
+            # try:
+            #     import pip
+            # except:
+            #     exec(open(os.path.join(self.plugin_dir, get_pip.py)).read())
+            #     import pip
+            #     # just in case the included version is old
+            #     pip.main(['install','--upgrade','pip'])
+
+            # try:
+            #     import tensorflow as tf
+            # except:
+            #     import sys
+            #     import subprocess
+            #     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tensorflow'])
+            #     import requests
+
+            
     
         # Fetch the currently loaded layers  
         layers = QgsProject.instance().layerTreeRoot().children()
@@ -213,10 +235,14 @@ class acnet_gui:
         if result:  
             filename = self.dlg.lineEdit.text()  
             with open(filename, 'w') as output_file:  
-
-                print("dasdasdas")
-
-        
+                TOA_xtesting = np.load(os.path.join(self.plugin_dir, 'TOA_XVali.npy')) #use val data bcs actly we dont need to test (only train)
+                angles_xtesting = np.load(os.path.join(self.plugin_dir, 'angles_XVali.npy'))
+                AOT_xtesting = np.load(os.path.join(self.plugin_dir, 'AOT_XVali.npy'))
+                hypermodel = tf.keras.models.load_model(os.path.join(self.plugin_dir,'my_trained_model.h5'))
+                
+                y_prediction = hypermodel.predict([TOA_xtesting, angles_xtesting, AOT_xtesting])
+                path_save_csv = 'output.csv'
+                np.savetxt(path_save_csv, y_prediction, delimiter=",")
 
             # Generate a message after running the plugin
             self.iface.messageBar().pushMessage(  
